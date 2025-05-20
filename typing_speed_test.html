@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Typing Speed Test Game</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f5f5f5;
+    }
+
+    .game-container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 400px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    #test-sentence {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+      height: 100px;
+      resize: none;
+    }
+
+    #input-field {
+      font-size: 1.2rem;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    #result {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #5bc0de;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #31b0d5;
+    }
+
+    #timer {
+      font-size: 1.5rem;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="game-container">
+    <h1>Typing Speed Test</h1>
+    <p id="result"></p>
+    <div>
+      <p id="test-sentence"></p>
+      <textarea id="input-field" placeholder="Start typing here..." disabled></textarea>
+    </div>
+    <button onclick="startTest()">Start Test</button>
+    <p id="timer">Time Remaining: <span id="time">60</span>s</p>
+  </div>
+
+  <script>
+    const sentences = [
+      "The quick brown fox jumps over the lazy dog.",
+      "A journey of a thousand miles begins with a single step.",
+      "To be or not to be, that is the question.",
+      "In the middle of difficulty lies opportunity.",
+      "Success is not final, failure is not fatal: It is the courage to continue that counts."
+    ];
+
+    let selectedSentence, timer, startTime, timerInterval, timeLeft, wpm, gameActive;
+
+    // Start the test
+    function startTest() {
+      selectedSentence = sentences[Math.floor(Math.random() * sentences.length)];
+      document.getElementById('test-sentence').textContent = selectedSentence;
+      document.getElementById('input-field').disabled = false;
+      document.getElementById('input-field').value = '';
+      document.getElementById('input-field').focus();
+      document.getElementById('result').textContent = '';
+      document.getElementById('time').textContent = '60';
+
+      // Reset variables
+      timeLeft = 60;
+      wpm = 0;
+      gameActive = true;
+
+      // Start the timer
+      startTime = Date.now();
+      timerInterval = setInterval(updateTimer, 1000);
+    }
+
+    // Update the timer
+    function updateTimer() {
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        calculateWPM();
+        document.getElementById('result').textContent = `Time's up! You typed at ${wpm} words per minute.`;
+        gameActive = false;
+        document.getElementById('input-field').disabled = true;
+      } else {
+        timeLeft--;
+        document.getElementById('time').textContent = timeLeft;
+      }
+    }
+
+    // Calculate WPM (Words Per Minute)
+    function calculateWPM() {
+      const wordsTyped = document.getElementById('input-field').value.trim().split(/\s+/).length;
+      const timeElapsed = (Date.now() - startTime) / 60000; // Convert time to minutes
+      wpm = Math.round(wordsTyped / timeElapsed);
+    }
+
+    // Listen for user input in the text field
+    document.getElementById('input-field').addEventListener('input', function () {
+      if (!gameActive) return;
+
+      const typedText = document.getElementById('input-field').value.trim();
+      if (typedText === selectedSentence) {
+        clearInterval(timerInterval);
+        calculateWPM();
+        document.getElementById('result').textContent = `Congratulations! You typed at ${wpm} words per minute.`;
+        gameActive = false;
+        document.getElementById('input-field').disabled = true;
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rock, Paper, Scissors</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f5f5f5;
+    }
+
+    .game-container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 400px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    .choices {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .choice {
+      font-size: 2rem;
+      cursor: pointer;
+      padding: 10px 20px;
+      background-color: #e0e0e0;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .choice:hover {
+      background-color: #d0d0d0;
+    }
+
+    #result {
+      font-size: 1.5rem;
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #5bc0de;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #31b0d5;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="game-container">
+    <h1>Rock, Paper, Scissors</h1>
+    
+    <!-- Choices Section -->
+    <div class="choices">
+      <div class="choice" onclick="play('rock')">Rock</div>
+      <div class="choice" onclick="play('paper')">Paper</div>
+      <div class="choice" onclick="play('scissors')">Scissors</div>
+    </div>
+    
+    <!-- Result Section -->
+    <div id="result"></div>
+    <button onclick="resetGame()">Play Again</button>
+  </div>
+
+  <script>
+    const choices = ['rock', 'paper', 'scissors'];
+
+    // Play a round
+    function play(playerChoice) {
+      // Get computer's choice randomly
+      const computerChoice = choices[Math.floor(Math.random() * 3)];
+
+      // Determine the result
+      let result = '';
+
+      if (playerChoice === computerChoice) {
+        result = `It's a draw! Both chose ${playerChoice.charAt(0).toUpperCase() + playerChoice.slice(1)}.`;
+      } else if (
+        (playerChoice === 'rock' && computerChoice === 'scissors') ||
+        (playerChoice === 'paper' && computerChoice === 'rock') ||
+        (playerChoice === 'scissors' && computerChoice === 'paper')
+      ) {
+        result = `You win! ${playerChoice.charAt(0).toUpperCase() + playerChoice.slice(1)} beats ${computerChoice}.`;
+      } else {
+        result = `You lose! ${computerChoice.charAt(0).toUpperCase() + computerChoice.slice(1)} beats ${playerChoice}.`;
+      }
+
+      // Display the result
+      document.getElementById('result').innerHTML = `
+        <p>You chose <strong>${playerChoice.charAt(0).toUpperCase() + playerChoice.slice(1)}</strong>.</p>
+        <p>Computer chose <strong>${computerChoice.charAt(0).toUpperCase() + computerChoice.slice(1)}</strong>.</p>
+        <p>${result}</p>
+      `;
+    }
+
+    // Reset the game
+    function resetGame() {
+      document.getElementById('result').innerHTML = '';
+    }
+  </script>
+
+</body>
+</html>
